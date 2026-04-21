@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: emrs-qpg-server
+    env: node
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: OPENROUTER_KEY
+        sync: false
+    autoDeploy: true
