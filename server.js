@@ -21,7 +21,13 @@ const C = {
   qNum:'1C3A6B', qText:'111111', marks:'2E6DA4',
   hindi:'333333', option:'2E6DA4', optTxt:'000000',
   optSep:'AAAAAA', optHi:'444444', answer:'666666',
-  black:'000000', footer:'AAAAAA', shade:'F5F0E0'
+  black:'000000', footer:'AAAAAA',
+  // Section header colors (exact from reference DOCX)
+  secBg:'1C3A6B',       // dark navy background
+  secEn:'FFFFFF',       // white English text
+  secSep:'99BBDD',      // light blue separator |
+  secHi:'FFD966',       // gold Hindi text
+  secMarks:'132848',    // dark navy marks
 };
 
 // ── SCHOOL ────────────────────────────────────────────────────────
@@ -438,13 +444,13 @@ app.post('/api/create-docx', async (req,res) => {
 
 // ── HELPERS ───────────────────────────────────────────────────────
 function tr(text,size,bold,font,color,italic){
-  const f = font||'Times New Roman';
+  const f = font||'Arial';
   return new TextRun({
     text:String(text), bold:!!bold, italics:!!italic,
     size:Math.round((size||11)*2), font:f, color:color||'000000'
   });
 }
-function trH(text,size,bold,color){ return tr(text,size,bold,'Kokila',color); }
+function trH(text,size,bold,color){ return tr(text,size,bold,'Mangal',color); }
 function cp(runs,align,spacing,indent){
   return new Paragraph({
     alignment:align||AlignmentType.LEFT,
@@ -507,10 +513,10 @@ function buildHeader(config, W) {
     borders:bdr(), rows:[new TableRow({children:[new TableCell({
       margins:mg(100),
       children:[
-        cp([tr(SCH_EN,17,true,'Times New Roman',C.black)]),
-        cp([trH(SCH_HI,13,true,C.black)]),
-        cp([tr(SCH_LOC,12,true,'Times New Roman',C.black)]),
-        cp([tr(SCH_AFF,9,false,'Times New Roman',C.black,true)]),
+        cp([tr(SCH_EN,17,true,'Arial',C.black)]),
+        cp([tr(SCH_LOC,13,true,'Arial',C.black)]),
+        cp([tr(SCH_HI,13,true,'Mangal',C.black)]),
+        cp([tr(SCH_AFF,9.5,false,'Arial',C.black,true)]),
       ]
     })]})]
   }));
@@ -521,20 +527,20 @@ function buildHeader(config, W) {
     width:{size:W,type:WidthType.DXA}, columnWidths:[3200,3200,2960],
     borders:bdr(), rows:[new TableRow({children:[
       new TableCell({width:{size:3200,type:WidthType.DXA},margins:mg(80),children:[
-        cp([tr(exam+'  /  '+hiExam(exam),11.5,true,'Times New Roman',C.black)]),
-        cp([tr('Session: '+session+'  /  \u0938\u0924\u094d\u0930: '+session,9,false,'Times New Roman',C.black)]),
-        cp([tr('Set / \u0938\u0947\u091f: '+(setLabel||'A'),10,true,'Times New Roman',C.marks)]),
+        cp([tr(exam+'  /  '+hiExam(exam),11.5,true,'Arial',C.black)]),
+        cp([tr('Session: '+session+'  /  \u0938\u0924\u094d\u0930: '+session,9,false,'Arial',C.black)]),
+        cp([tr('Set / \u0938\u0947\u091f: '+(setLabel||'A'),10,true,'Arial',C.marks)]),
       ]}),
       new TableCell({width:{size:3200,type:WidthType.DXA},margins:mg(80),verticalAlign:VerticalAlign.CENTER,children:[
-        cp([tr(sub.toUpperCase(),12,true,'Times New Roman',C.black)],AlignmentType.CENTER),
+        cp([tr(sub.toUpperCase(),12,true,'Arial',C.black)],AlignmentType.CENTER),
         cp([trH(hiSub(sub),11,true,C.black)],AlignmentType.CENTER),
       ]}),
       new TableCell({width:{size:2960,type:WidthType.DXA},margins:mg(80),children:[
-        cp([tr('Class / \u0915\u0915\u094d\u0937\u093e: '+clsDisplay,10.5,true,'Times New Roman',C.black)]),
-        cp([tr('Max. Marks / \u0905\u0902\u0915: '+marks,9.5,false,'Times New Roman',C.black)]),
-        cp([tr('Time / \u0938\u092e\u092f: '+duration,9.5,false,'Times New Roman',C.black)]),
-        ...(teacher?[cp([tr('Teacher: '+teacher,9,false,'Times New Roman',C.black)])]:[]),
-        ...(date?[cp([tr('Date: '+date,9,false,'Times New Roman',C.black)])]:[]),
+        cp([tr('Class / \u0915\u0915\u094d\u0937\u093e: '+clsDisplay,10.5,true,'Arial',C.black)]),
+        cp([tr('Max. Marks / \u0905\u0902\u0915: '+marks,9.5,false,'Arial',C.black)]),
+        cp([tr('Time / \u0938\u092e\u092f: '+duration,9.5,false,'Arial',C.black)]),
+        ...(teacher?[cp([tr('Teacher: '+teacher,9,false,'Arial',C.black)])]:[]),
+        ...(date?[cp([tr('Date: '+date,9,false,'Arial',C.black)])]:[]),
       ]}),
     ]})]
   }));
@@ -544,15 +550,15 @@ function buildHeader(config, W) {
   children.push(new Table({
     width:{size:W,type:WidthType.DXA}, columnWidths:[4000,2800,2560],
     borders:bdr(), rows:[new TableRow({children:[
-      new TableCell({margins:mg(70),children:[cp([tr('Name / \u0928\u093e\u092e : __________________________________',10,false,'Times New Roman',C.black)])]}),
-      new TableCell({margins:mg(70),children:[cp([tr('Roll No. / \u0915\u094d\u0930\u092e\u093e\u0902\u0915 : __________',10,false,'Times New Roman',C.black)])]}),
-      new TableCell({margins:mg(70),children:[cp([tr('Section / \u0905\u0928\u0941\u092d\u093e\u0917 : _____',10,false,'Times New Roman',C.black)])]}),
+      new TableCell({margins:mg(70),children:[cp([tr('Name / \u0928\u093e\u092e : __________________________________',10,false,'Arial',C.black)])]}),
+      new TableCell({margins:mg(70),children:[cp([tr('Roll No. / \u0915\u094d\u0930\u092e\u093e\u0902\u0915 : __________',10,false,'Arial',C.black)])]}),
+      new TableCell({margins:mg(70),children:[cp([tr('Section / \u0905\u0928\u0941\u092d\u093e\u0917 : _____',10,false,'Arial',C.black)])]}),
     ]})]
   }));
   children.push(sp(40));
 
   // General Instructions heading
-  children.push(cp([tr('GENERAL INSTRUCTIONS  /  \u0938\u093e\u092e\u093e\u0928\u094d\u092f \u0928\u093f\u0930\u094d\u0926\u0947\u0936',12,true,'Times New Roman',C.qNum)],AlignmentType.CENTER));
+  children.push(cp([tr('GENERAL INSTRUCTIONS  /  \u0938\u093e\u092e\u093e\u0928\u094d\u092f \u0928\u093f\u0930\u094d\u0926\u0947\u0936',12,true,'Arial',C.qNum)],AlignmentType.CENTER));
   children.push(sp(30));
 
   // Table 3: Instructions bilingual
@@ -568,10 +574,10 @@ function buildHeader(config, W) {
     width:{size:W,type:WidthType.DXA}, columnWidths:[4680,4680], borders:bdr(),
     rows:INSTRS.map((pair,idx)=>new TableRow({children:[
       new TableCell({width:{size:4680,type:WidthType.DXA},margins:mg(60),children:[
-        cp([tr(`${idx+1}. `,9.5,true,'Times New Roman',C.black),tr(pair[0],9.5,false,'Times New Roman',C.black)])
+        cp([tr(`${idx+1}. `,9.5,true,'Arial',C.black),tr(pair[0],9.5,false,'Arial',C.black)])
       ]}),
       new TableCell({width:{size:4680,type:WidthType.DXA},margins:mg(60),children:[
-        cp([tr(`${idx+1}. `,9.5,true,'Kokila',C.black),trH(pair[1],9.5,false,C.black)])
+        cp([tr(`${idx+1}. `,9.5,true,'Mangal',C.black),trH(pair[1],9.5,false,C.black)])
       ]}),
     ]}))
   }));
@@ -588,19 +594,19 @@ function buildSectionHeader(secLetter, secName, marksFormula, W) {
     rows:[new TableRow({children:[
       new TableCell({
         width:{size:7200,type:WidthType.DXA},
-        shading:{fill:C.shade,type:ShadingType.CLEAR},
+        shading:{fill:C.secBg,type:ShadingType.CLEAR},
         margins:mg(80),
         children:[cp([
-          tr(`SECTION \u2013 ${secLetter}   ${secName}`,12,true,'Times New Roman',C.black),
-          tr('   |   ',10,false,'Times New Roman',C.black),
-          trH(`\u0916\u0902\u0921 \u2013 ${hiL}   ${hiN}`,11,true,C.black),
+          tr(`SECTION \u2013 ${secLetter}   ${secName}`,12,true,'Arial',C.secEn),
+          tr('   |   ',10,false,'Arial',C.secSep),
+          tr(`\u0916\u0902\u0921 \u2013 ${hiL}   ${hiN}`,11,true,'Mangal',C.secHi),
         ])]
       }),
       new TableCell({
         width:{size:2160,type:WidthType.DXA},
-        shading:{fill:C.shade,type:ShadingType.CLEAR},
+        shading:{fill:C.secBg,type:ShadingType.CLEAR},
         margins:mg(80), verticalAlign:VerticalAlign.CENTER,
-        children:[cp([tr(marksFormula,10,true,'Times New Roman',C.black)],AlignmentType.RIGHT)]
+        children:[cp([tr(marksFormula,10,true,'Arial',C.secMarks)],AlignmentType.RIGHT)]
       }),
     ]})]
   });
@@ -618,7 +624,7 @@ function renderPaperLines(lines, blueprint, W) {
       if(!bl.trim()) return sp(20);
       const isHdr = !!(bl.match(/^(READ|MAP|Case|Source|PASSAGE|Study|Observe)/i));
       const isH = isHin(bl);
-      return cp([isH?trH(bl,10,isHdr,C.black):tr(bl,10,isHdr,'Times New Roman',C.black)],AlignmentType.LEFT,{before:20,after:20});
+      return cp([isH?trH(bl,10,isHdr,C.black):tr(bl,10,isHdr,'Arial',C.black)],AlignmentType.LEFT,{before:20,after:20});
     });
     children.push(new Table({
       width:{size:W,type:WidthType.DXA}, columnWidths:[W],
@@ -671,9 +677,9 @@ function renderPaperLines(lines, blueprint, W) {
       let marksStr = '';
       if(mkM){ marksStr=`[${mkM[1]} Mark${mkM[1]==='1'?'':'s'} / ${mkM[1]} \u0905\u0902\u0915]`; rest=rest.slice(0,rest.lastIndexOf(mkM[0])).trim(); }
       children.push(cp([
-        tr(qNum+'  ',11,true,'Times New Roman',C.qNum),
-        tr(rest,11,false,'Times New Roman',C.qText),
-        ...(marksStr?[tr('   '+marksStr,10,true,'Times New Roman',C.marks)]:[])
+        tr(qNum+'  ',11,true,'Arial',C.qNum),
+        tr(rest,11,false,'Arial',C.qText),
+        ...(marksStr?[tr('   '+marksStr,10,true,'Arial',C.marks)]:[])
       ],AlignmentType.LEFT,{before:140,after:20}));
       // Hindi translation on next line
       let j=i+1;
@@ -696,9 +702,9 @@ function renderPaperLines(lines, blueprint, W) {
       let sMarks='',sTxt=rest2;
       if(mkM2){sMarks=`[${mkM2[1]} \u0905\u0902\u0915]`;sTxt=rest2.slice(0,rest2.lastIndexOf(mkM2[0])).trim();}
       children.push(cp([
-        tr(`(${subM[1]})  `,10,true,'Times New Roman',C.qNum),
-        tr(sTxt,10.5,false,'Times New Roman',C.qText),
-        ...(sMarks?[tr('   '+sMarks,10,true,'Times New Roman',C.marks)]:[])
+        tr(`(${subM[1]})  `,10,true,'Arial',C.qNum),
+        tr(sTxt,10.5,false,'Arial',C.qText),
+        ...(sMarks?[tr('   '+sMarks,10,true,'Arial',C.marks)]:[])
       ],AlignmentType.LEFT,{before:60,after:20},360));
       i++;continue;
     }
@@ -711,9 +717,9 @@ function renderPaperLines(lines, blueprint, W) {
       const en=parts[0]?parts[0].trim():optRest;
       const hi=parts[1]?parts[1].trim():'';
       children.push(cp([
-        tr(`(${optL})  `,10,true,'Times New Roman',C.option),
-        tr(en,10,false,'Times New Roman',C.optTxt),
-        ...(hi?[tr('   /   ',9,false,'Times New Roman',C.optSep),trH(hi,9.5,false,C.optHi)]:[])
+        tr(`(${optL})  `,10,true,'Arial',C.option),
+        tr(en,10,false,'Arial',C.optTxt),
+        ...(hi?[tr('   /   ',9,false,'Arial',C.optSep),trH(hi,9.5,false,C.optHi)]:[])
       ],AlignmentType.LEFT,{before:20,after:20},360));
       i++;continue;
     }
@@ -721,31 +727,31 @@ function renderPaperLines(lines, blueprint, W) {
     // Markdown table row
     if(line.startsWith('|')){
       const cells=line.split('|').map(s=>s.trim()).filter(Boolean);
-      if(cells.length) children.push(cp([tr(cells.join('   '),10,false,'Times New Roman',C.black)],AlignmentType.LEFT,{before:20,after:20},360));
+      if(cells.length) children.push(cp([tr(cells.join('   '),10,false,'Arial',C.black)],AlignmentType.LEFT,{before:20,after:20},360));
       i++;continue;
     }
 
     // OR separator
     if(line==='OR'||line.match(/^OR\s*\/\s*\u0905\u0925\u0935\u093e/i)){
-      children.push(cp([tr('OR  /  \u0905\u0925\u0935\u093e',10,true,'Times New Roman',C.marks)],AlignmentType.CENTER,{before:80,after:80}));
+      children.push(cp([tr('OR  /  \u0905\u0925\u0935\u093e',10,true,'Arial',C.marks)],AlignmentType.CENTER,{before:80,after:80}));
       i++;continue;
     }
 
     // Answer blank
     if(line.match(/^Answer\s*[\/|:]/i)){
-      children.push(cp([tr('Answer / \u0909\u0924\u094d\u0924\u0930 : ___________',10,false,'Times New Roman',C.answer)],AlignmentType.LEFT,{before:20,after:60}));
+      children.push(cp([tr('Answer / \u0909\u0924\u094d\u0924\u0930 : ___________',10,false,'Arial',C.answer)],AlignmentType.LEFT,{before:20,after:60}));
       i++;continue;
     }
 
     // *** end marker
     if(line==='***'||line==='* * *'){
-      children.push(cp([tr('\u2022 \u2022 \u2022',12,true,'Times New Roman',C.black)],AlignmentType.CENTER,{before:160,after:80}));
+      children.push(cp([tr('\u2022 \u2022 \u2022',12,true,'Arial',C.black)],AlignmentType.CENTER,{before:160,after:80}));
       i++;continue;
     }
 
     // Part header
     if(line.match(/^Part[\-\s]*(I|II|III|IV|V)\b/i)){
-      children.push(cp([tr(line,10.5,true,'Times New Roman',C.marks)],AlignmentType.LEFT,{before:80,after:40}));
+      children.push(cp([tr(line,10.5,true,'Arial',C.marks)],AlignmentType.LEFT,{before:80,after:40}));
       i++;continue;
     }
 
@@ -757,13 +763,13 @@ function renderPaperLines(lines, blueprint, W) {
 
     // Assertion/Reason label lines
     if(line.match(/^(Assertion|Reason|Statement)/i)){
-      children.push(cp([tr(line,10.5,false,'Times New Roman',C.black,true)],AlignmentType.LEFT,{before:20,after:20},360));
+      children.push(cp([tr(line,10.5,false,'Arial',C.black,true)],AlignmentType.LEFT,{before:20,after:20},360));
       i++;continue;
     }
 
     // Default
     const isBold=!!(line.match(/^(GENERAL INSTRUCTIONS|Answer each)/i));
-    children.push(cp([tr(line,10.5,isBold,'Times New Roman',C.black)],AlignmentType.LEFT,{before:40,after:40}));
+    children.push(cp([tr(line,10.5,isBold,'Arial',C.black)],AlignmentType.LEFT,{before:40,after:40}));
     i++;
   }
   flushCase();
@@ -781,14 +787,14 @@ async function buildPaperDocx(paperText, config) {
   // Footer
   children.push(sp(120));
   children.push(cp([
-    tr('\u2014\u2014  ',10,false,'Times New Roman',C.footer),
-    tr('Best of Luck! / \u0936\u0941\u092d\u0915\u093e\u092e\u0928\u093e\u090f\u0901!',13,true,'Times New Roman',C.qNum),
-    tr('  \u2014\u2014',10,false,'Times New Roman',C.footer),
+    tr('\u2014\u2014  ',10,false,'Arial',C.footer),
+    tr('Best of Luck! / \u0936\u0941\u092d\u0915\u093e\u092e\u0928\u093e\u090f\u0901!',13,true,'Arial',C.qNum),
+    tr('  \u2014\u2014',10,false,'Arial',C.footer),
   ],AlignmentType.CENTER,{before:80,after:40}));
-  children.push(cp([tr('Eklavya Model Residential School, Bansla-Bagidora, Banswara (Rajasthan)',8,false,'Times New Roman',C.footer)],AlignmentType.CENTER));
+  children.push(cp([tr('Eklavya Model Residential School, Bansla-Bagidora, Banswara (Rajasthan)',8,false,'Arial',C.footer)],AlignmentType.CENTER));
 
   const doc = new Document({sections:[{
-    properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:900,bottom:720,left:900}}},
+    properties:{page:{size:{width:11906,height:16838},margin:{top:900,right:900,bottom:900,left:900}}},
     children
   }]});
   return await Packer.toBuffer(doc);
@@ -806,9 +812,9 @@ async function buildAnswerKeyDocx(answerKey, config) {
       margins:mg(100),
       shading:{fill:C.shade,type:ShadingType.CLEAR},
       children:[
-        cp([tr('ANSWER KEY / MARKING SCHEME',14,true,'Times New Roman',C.qNum)],AlignmentType.CENTER),
+        cp([tr('ANSWER KEY / MARKING SCHEME',14,true,'Arial',C.qNum)],AlignmentType.CENTER),
         cp([trH('\u0909\u0924\u094d\u0924\u0930 \u0915\u0941\u0902\u091c\u0940 / \u0905\u0902\u0915\u0928 \u092f\u094b\u091c\u0928\u093e',12,true,C.qNum)],AlignmentType.CENTER),
-        cp([tr(`${config.sub||''} | Class ${config.cls||''} | ${config.exam||''} | Set ${config.setLabel||'A'} | Session: ${config.session||''}`,10,false,'Times New Roman',C.black)],AlignmentType.CENTER),
+        cp([tr(`${config.sub||''} | Class ${config.cls||''} | ${config.exam||''} | Set ${config.setLabel||'A'} | Session: ${config.session||''}`,10,false,'Arial',C.black)],AlignmentType.CENTER),
       ]
     })]})]
   }));
@@ -822,21 +828,21 @@ async function buildAnswerKeyDocx(answerKey, config) {
     const isH = isHin(t);
     if(isSecH){
       children.push(sp(60));
-      children.push(cp([tr(t,12,true,'Times New Roman',C.qNum)],AlignmentType.LEFT,{before:80,after:40}));
+      children.push(cp([tr(t,12,true,'Arial',C.qNum)],AlignmentType.LEFT,{before:80,after:40}));
     } else if(isQH){
-      children.push(cp([tr(t,11,true,'Times New Roman',C.black)],AlignmentType.LEFT,{before:60,after:20}));
+      children.push(cp([tr(t,11,true,'Arial',C.black)],AlignmentType.LEFT,{before:60,after:20}));
     } else if(isH){
       children.push(cp([trH(t,10,false,C.hindi)],AlignmentType.LEFT,{before:20,after:20}));
     } else {
-      children.push(cp([tr(t,10.5,false,'Times New Roman',C.black)],AlignmentType.LEFT,{before:20,after:20},360));
+      children.push(cp([tr(t,10.5,false,'Arial',C.black)],AlignmentType.LEFT,{before:20,after:20},360));
     }
   }
 
   children.push(sp(80));
-  children.push(cp([tr('— Prepared by EMRS QPG System —',9,false,'Times New Roman',C.footer)],AlignmentType.CENTER));
+  children.push(cp([tr('— Prepared by EMRS QPG System —',9,false,'Arial',C.footer)],AlignmentType.CENTER));
 
   const doc = new Document({sections:[{
-    properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:900,bottom:720,left:900}}},
+    properties:{page:{size:{width:11906,height:16838},margin:{top:900,right:900,bottom:900,left:900}}},
     children
   }]});
   return await Packer.toBuffer(doc);
@@ -854,9 +860,9 @@ async function buildBlueprintDocx(bpText, config) {
       margins:mg(100),
       shading:{fill:'1C3A6B',type:ShadingType.CLEAR},
       children:[
-        cp([tr('QUESTION PAPER BLUEPRINT',14,true,'Times New Roman','FFFFFF')],AlignmentType.CENTER),
+        cp([tr('QUESTION PAPER BLUEPRINT',14,true,'Arial','FFFFFF')],AlignmentType.CENTER),
         cp([trH('\u092a\u094d\u0930\u0936\u094d\u0928 \u092a\u0924\u094d\u0930 \u092c\u094d\u0932\u0942\u092a\u094d\u0930\u093f\u0902\u091f',12,true,'FFFFFF')],AlignmentType.CENTER),
-        cp([tr(`${config.sub||''} | Class ${config.cls||''} | ${config.exam||''} | Marks: ${config.marks||40}`,10,false,'Times New Roman','FFFFFF')],AlignmentType.CENTER),
+        cp([tr(`${config.sub||''} | Class ${config.cls||''} | ${config.exam||''} | Marks: ${config.marks||40}`,10,false,'Arial','FFFFFF')],AlignmentType.CENTER),
       ]
     })]})]
   }));
@@ -875,24 +881,24 @@ async function buildBlueprintDocx(bpText, config) {
       ].map(h=>new TableCell({
         shading:{fill:C.shade,type:ShadingType.CLEAR},
         margins:mg(60),
-        children:[cp([tr(h,9.5,true,'Times New Roman',C.qNum)],AlignmentType.CENTER)]
+        children:[cp([tr(h,9.5,true,'Arial',C.qNum)],AlignmentType.CENTER)]
       }))}),
       // Data rows from blueprint config
       ...(Array.isArray(config.blueprint)?config.blueprint.map(b=>
         new TableRow({children:[
-          new TableCell({margins:mg(60),children:[cp([tr('Sec '+b.sec,10,true,'Times New Roman',C.black)],AlignmentType.CENTER)]}),
-          new TableCell({margins:mg(60),children:[cp([tr(b.type||'',10,false,'Times New Roman',C.black)])]}),
-          new TableCell({margins:mg(60),children:[cp([tr(String(b.q),12,true,'Times New Roman',C.black)],AlignmentType.CENTER)]}),
-          new TableCell({margins:mg(60),children:[cp([tr(String(b.m),12,true,'Times New Roman',C.black)],AlignmentType.CENTER)]}),
-          new TableCell({margins:mg(60),children:[cp([tr(String(b.tot),12,true,'Times New Roman',C.marks)],AlignmentType.CENTER)]}),
-          new TableCell({margins:mg(60),children:[cp([tr(b.choice||'No',10,false,'Times New Roman',C.black)],AlignmentType.CENTER)]}),
+          new TableCell({margins:mg(60),children:[cp([tr('Sec '+b.sec,10,true,'Arial',C.black)],AlignmentType.CENTER)]}),
+          new TableCell({margins:mg(60),children:[cp([tr(b.type||'',10,false,'Arial',C.black)])]}),
+          new TableCell({margins:mg(60),children:[cp([tr(String(b.q),12,true,'Arial',C.black)],AlignmentType.CENTER)]}),
+          new TableCell({margins:mg(60),children:[cp([tr(String(b.m),12,true,'Arial',C.black)],AlignmentType.CENTER)]}),
+          new TableCell({margins:mg(60),children:[cp([tr(String(b.tot),12,true,'Arial',C.marks)],AlignmentType.CENTER)]}),
+          new TableCell({margins:mg(60),children:[cp([tr(b.choice||'No',10,false,'Arial',C.black)],AlignmentType.CENTER)]}),
         ]})
       ):[]),
       // Total row
       ...(Array.isArray(config.blueprint)?[new TableRow({children:[
-        new TableCell({columnSpan:4,margins:mg(60),shading:{fill:C.shade,type:ShadingType.CLEAR},children:[cp([tr('TOTAL',11,true,'Times New Roman',C.qNum)],AlignmentType.RIGHT)]}),
-        new TableCell({margins:mg(60),shading:{fill:C.shade,type:ShadingType.CLEAR},children:[cp([tr(String(config.blueprint.reduce((a,b)=>a+b.tot,0)),14,true,'Times New Roman',C.marks)],AlignmentType.CENTER)]}),
-        new TableCell({margins:mg(60),shading:{fill:C.shade,type:ShadingType.CLEAR},children:[cp([tr('',10,false,'Times New Roman',C.black)])]}),
+        new TableCell({columnSpan:4,margins:mg(60),shading:{fill:C.shade,type:ShadingType.CLEAR},children:[cp([tr('TOTAL',11,true,'Arial',C.qNum)],AlignmentType.RIGHT)]}),
+        new TableCell({margins:mg(60),shading:{fill:C.shade,type:ShadingType.CLEAR},children:[cp([tr(String(config.blueprint.reduce((a,b)=>a+b.tot,0)),14,true,'Arial',C.marks)],AlignmentType.CENTER)]}),
+        new TableCell({margins:mg(60),shading:{fill:C.shade,type:ShadingType.CLEAR},children:[cp([tr('',10,false,'Arial',C.black)])]}),
       ]})]:[]),
     ]
   }));
@@ -901,16 +907,16 @@ async function buildBlueprintDocx(bpText, config) {
 
   // Also render any blueprint text from AI
   if(bpText){
-    children.push(cp([tr('AI Generated Blueprint Details:',11,true,'Times New Roman',C.qNum)],AlignmentType.LEFT,{before:60,after:40}));
+    children.push(cp([tr('AI Generated Blueprint Details:',11,true,'Arial',C.qNum)],AlignmentType.LEFT,{before:60,after:40}));
     for(const line of bpText.split('\n')){
       const t=line.replace(/\*\*/g,'').trim();
       if(!t){children.push(sp(30));continue;}
-      children.push(cp([tr(t,10,false,'Times New Roman',C.black)],AlignmentType.LEFT,{before:20,after:20}));
+      children.push(cp([tr(t,10,false,'Arial',C.black)],AlignmentType.LEFT,{before:20,after:20}));
     }
   }
 
   const doc = new Document({sections:[{
-    properties:{page:{size:{width:11906,height:16838},margin:{top:720,right:900,bottom:720,left:900}}},
+    properties:{page:{size:{width:11906,height:16838},margin:{top:900,right:900,bottom:900,left:900}}},
     children
   }]});
   return await Packer.toBuffer(doc);
